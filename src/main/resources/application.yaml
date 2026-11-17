@@ -1,3 +1,13 @@
 spring:
   application:
     name: ozone
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/finance
+    username: postgres
+    password: ghost
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
