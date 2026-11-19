@@ -13,6 +13,8 @@ import oryon.springboot.ozone.enums.UserRole;
 import oryon.springboot.ozone.enums.UserStatus;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -67,4 +69,15 @@ public class User {
     private UserStatus status = UserStatus.pending_otp;
 
     private String address;
+
+    private String mfaSecret;
+    private boolean mfaEnabled = false;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_recovery_codes", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "code_hash")
+    private List<String> recoveryCodeHashes = new ArrayList<>();
+
+    private Long lastUsedTotpStep;
+
 }

@@ -7,9 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import oryon.springboot.ozone.DTO.ErrorResponse;
-import oryon.springboot.ozone.exception.ChampNotValidateException;
-import oryon.springboot.ozone.exception.DataNotFoundException;
-import oryon.springboot.ozone.exception.NumeroTelephoneUniqueException;
+import oryon.springboot.ozone.exception.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -70,6 +68,18 @@ public class GlobalExceptionHandler {
                 Map.of("cause", ex.getMostSpecificCause().getMessage())
         );
         return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorized(UnauthorizedException ex) {
+        ErrorResponse body = new ErrorResponse("UNAUTHORIZED", ex.getMessage(), Map.of());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+    }
+
+    @ExceptionHandler(TooManyAttemptsException.class)
+    public ResponseEntity<ErrorResponse> handleTooManyAttempts(TooManyAttemptsException ex) {
+        ErrorResponse body = new ErrorResponse(ex.getCode(), ex.getMessage(), Map.of());
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(body);
     }
 }
 
